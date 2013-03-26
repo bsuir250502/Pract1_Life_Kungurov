@@ -1,0 +1,8 @@
+*~
+*.o
+*.exe
+obj/
+*.workspace
+*.cbp
+*.stackdump
+*.layout
