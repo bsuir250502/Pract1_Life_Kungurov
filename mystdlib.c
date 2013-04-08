@@ -1,10 +1,15 @@
 /* -*- coding: utf-8-dos -*- */
 #include "mystdlib.h"
+char *my_fgets(char *buf, size_t buf_size, FILE *file)
+{
+fgets(buf, buf_size, file);
+buf[strlen(buf) - 1] = '\0';
+return buf;
+}
+
 char *my_gets(char *buf, size_t buf_size)
 {
-    fgets(buf, buf_size, file);
-    buf[strlen(buf) - 1] = '\0';
-    return buf;
+return my_fgets(buf,buf_size,stdin);
 }
 
 int read_number()
