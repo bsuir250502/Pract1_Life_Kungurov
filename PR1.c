@@ -4,12 +4,6 @@
 char **background1, **background2;
 int size1, size2;
 FILE *file;
-void clrscr(void)
-{
-    char a[80];
-    printf("\033[2J");          /* Clear the entire screen. */
-    printf("\033[0;0f");        /* Move cursor to the top left hand corner */
-} 
 int chk(int x, int y)
 {
     int i = 0;
@@ -36,14 +30,14 @@ int chk(int x, int y)
 void next_generation(char **background1, char **background2, int size1,
                      int size2)
 {
-    int i, j;
+    int i, j, n;
     for (i = 0; i < size1; i++)
         for (j = 0; j < size2; j++) {
-            chk(i, j);
-            if (i == 3) {
+            n = chk(i, j);
+            if (n == 3) {
                 background2[i][j] = '1';
             }
-            else if (i == 2){
+            else if (n == 2){
                 background2[i][j] = background1[i][j];
             }
             else {
@@ -75,11 +69,9 @@ void enter_background(char **background1, int size1, int size2)
 void display_background(char **background1, int size1, int size2)
 {
     int i, j;
-    printf("%d,%d:\n",size1,size2);
     for (i = 0; i < size1; i++) {
-        printf("%d:",i);
         for (j = 0; j < size2; j++) {
-            printf("%3c ", background1[i][j]);
+            printf("%3c ",background1[i][j]);
         }
         puts(" ");
     }
@@ -89,8 +81,8 @@ int main()
 {
     int i, j, n;
     char str[10];
-    char *file_name = "test.txt";
-    file = fopen(file_name, "r");
+    char *file_name_in = "life_in.txt", *file_name_out = "life_out.txt";
+    file = fopen(file_name_in, "r");
     my_fgets(str, 5, file);
     size1 = atoi(str);
     my_fgets(str, 5, file);
@@ -105,16 +97,17 @@ int main()
     for (i = 0; i < size1; i++) {
         background2[i] = (char *) calloc(size2 + 4, sizeof(char));
     } enter_background(background1, size1, size2);
-    display_background(background1, size1, size2);
-
     i=0;
        while(n>=0){
-       clrscr();
        next_generation(background1,background2,size1,size2);
        cpy_new_instead_old_gen(background1,background2,size1,size2);
-       display_background(background1,size1,size2);
-
        n--;
        }
+    display_background(background1,size1,size2);
+    fclose(file);
+    file = fopen(file_name_out, "w");
+    for(i=0; i<size1 ; i++){
+        fprintf(file, "%s\n",background1[i]);
+    }
     return 0;
 }
