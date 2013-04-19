@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mystdlib.h"
-char **background1, **background2;
 int size1, size2;
 FILE *file;
-int chk(int x, int y)
+int chk(char **background1, int x, int y)
 {
     int i = 0;
     if (background1[(x + size1 - 1) % size1][y] == '1')
@@ -33,7 +32,7 @@ void next_generation(char **background1, char **background2, int size1,
     int i, j, n;
     for (i = 0; i < size1; i++)
         for (j = 0; j < size2; j++) {
-            n = chk(i, j);
+            n = chk(background1,i, j);
             if (n == 3) {
                 background2[i][j] = '1';
             }
@@ -79,14 +78,23 @@ void display_background(char **background1, int size1, int size2)
 
 int main()
 {
-    int i, j, n;
+    int i, n;
     char str[10];
+    char **background1, **background2;
     char *file_name_in = "life_in.txt", *file_name_out = "life_out.txt";
     file = fopen(file_name_in, "r");
-    my_fgets(str, 5, file);
-    size1 = atoi(str);
-    my_fgets(str, 5, file);
-    size2 = atoi(str);
+    while(1){
+        my_fgets(str, 5, file);
+        size1 = atoi(str);
+        if (size1 > 0) break;
+        puts("Input error. Try again");
+    }
+    while(1){
+        my_fgets(str, 5, file);
+        size2 = atoi(str);
+        if (size2 > 0) break;
+        puts("Input error. Try again");
+    }
     puts("Number of generation");
     my_fgets(str,5, file);
     n = atoi(str);
